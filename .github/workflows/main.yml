@@ -1,0 +1,37 @@
+name: auto-update-data
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+  - cron: '0 9 * * *'
+
+jobs:
+  SetUpR:
+    runs-on: macos-10.15
+    strategy:
+      matrix:
+        r-version: [4.0.2]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up R ${{ matrix.r-version }}
+        uses: r-lib/actions/setup-R@v1
+        with:
+          r-version: ${{ matrix.r-version }}
+
+      - name: Install dependencies
+        run: |
+          install.packages(c("tidyverse", "jsonlite","lubridate","glue"))
+        shell: Rscript {0}
+
+      - name: Updating data and cleaning
+        run: |
+          source('script.R')
+        shell: Rscript {0}
+
+      - name: Commit Changes
+        run: |
+          git commit data.json -m 'Re-build data.json' || echo "No changes to commit"
+          git push https://${{github.actor}}:${{secrets.GH_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
