@@ -14,7 +14,9 @@ europe <- df %>% filter(continent == 'Europe') %>%
   select(iso_code, location, date, new_cases_per_million, new_cases_smoothed_per_million, new_deaths_smoothed_per_million, people_fully_vaccinated_per_hundred, stringency_index) %>% 
   filter(!is.na(new_cases_smoothed_per_million)) %>% 
   filter(location != 'Vatican') %>% 
-  filter(location != 'Faeroe Islands')
+  filter(location != 'Faeroe Islands') %>% 
+  filter(location != 'Isle of Man') %>% 
+  filter(location != 'Gibraltar')
 
 
 countries <- read_csv('countries.csv')
