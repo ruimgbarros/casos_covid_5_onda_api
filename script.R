@@ -30,15 +30,18 @@ europe <- europe %>%
 #Find biggest increase in a week
 top_changes <- europe %>% 
   select(iso_code, location, date, new_cases_smoothed_per_million) %>% 
-  filter(date == max(europe$date) | date == max(europe$date - 7)) %>% 
-  pivot_wider(names_from = date, values_from = new_cases_smoothed_per_million) %>% 
-  mutate(txt = ((.[[4]] - .[[3]]) / 7 )) %>% 
-  arrange(-.[[4]]) %>% 
+  group_by(location) %>% 
+  filter(date == max(date) | date == max(date - 7)) %>% 
+  mutate(txt = (new_cases_smoothed_per_million - lag(new_cases_smoothed_per_million)/7)) %>% 
+  filter(!is.na(txt)) %>% 
+  arrange(-txt) %>% 
   select(location, txt)
 
 mortes <- europe %>%
-  filter(date == max(europe$date)) %>% 
-  select(location, new_deaths_smoothed_per_million)
+  group_by(location) %>% 
+  filter(date == max(date)) %>% 
+  select(location, new_deaths_smoothed_per_million) %>% 
+  mutate(new_deaths_smoothed_per_million = replace_na(new_deaths_smoothed_per_million, 0))
 
 vacin <- europe %>% 
   group_by(location) %>% 
