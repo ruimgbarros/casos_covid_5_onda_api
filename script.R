@@ -32,10 +32,13 @@ top_changes <- europe %>%
   select(iso_code, location, date, new_cases_smoothed_per_million) %>% 
   group_by(location) %>% 
   filter(date == max(date) | date == max(date - 7)) %>% 
-  mutate(txt = (lag(new_cases_smoothed_per_million)- new_cases_smoothed_per_million)/7) %>% 
-  filter(!is.na(txt)) %>% 
-  arrange(txt) %>% 
+  mutate(txt = new_cases_smoothed_per_million,
+         txt2 = lag(new_cases_smoothed_per_million)) %>% 
+  filter(!is.na(txt2)) %>% 
+  mutate(txt = (txt - txt2)/7) %>% 
+  arrange(-txt) %>% 
   select(location, txt)
+
 
 mortes <- europe %>%
   group_by(location) %>% 
