@@ -97,7 +97,7 @@ for (i in 1:length(top_changes$location)) {
 #Export data
 
 data <- list(
-  date = Sys.Date(),
+  date = Sys.time(),
   date_update = date_long,
   max_Y = europe %>% filter(new_cases_per_million == max(europe$new_cases_per_million, na.rm = T)) %>%  pull(new_cases_per_million),
   data_paises = countries
