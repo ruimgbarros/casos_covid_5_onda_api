@@ -36,7 +36,7 @@ top_changes <- europe %>%
          txt2 = lag(new_cases_smoothed_per_million)) %>% 
   filter(!is.na(txt2)) %>% 
   mutate(txt = (txt - txt2)/7) %>% 
-  arrange(-txt) %>% 
+  arrange(-new_cases_smoothed_per_million) %>% 
   select(location, txt)
 
 
