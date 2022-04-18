@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("tidyverse","tidyr","jsonlite","lubridate","glue"))
+          install.packages(c("tidyverse","tidyr","broom","jsonlite","lubridate","glue"))
         shell: Rscript {0}
 
       - name: Updating data and cleaning
